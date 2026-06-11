@@ -1,26 +1,25 @@
 <?php
 
-namespace Albertofuentes\FilamentMaintance;
+namespace Albertofuentes\FilamentMaintenance;
 
-use Filament\Support\Assets\AlpineComponent;
+use Albertofuentes\FilamentMaintenance\Commands\FilamentMaintenanceCommand;
+use Albertofuentes\FilamentMaintenance\Livewire\MaintenanceSwitch;
+use Albertofuentes\FilamentMaintenance\Testing\TestsFilamentMaintenance;
 use Filament\Support\Assets\Asset;
-use Filament\Support\Assets\Css;
-use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
 use Livewire\Features\SupportTesting\Testable;
+use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Albertofuentes\FilamentMaintance\Commands\FilamentMaintanceCommand;
-use Albertofuentes\FilamentMaintance\Testing\TestsFilamentMaintance;
 
-class FilamentMaintanceServiceProvider extends PackageServiceProvider
+class FilamentMaintenanceServiceProvider extends PackageServiceProvider
 {
-    public static string $name = 'filament-maintance';
+    public static string $name = 'filament-maintenance';
 
-    public static string $viewNamespace = 'filament-maintance';
+    public static string $viewNamespace = 'filament-maintenance';
 
     public function configurePackage(Package $package): void
     {
@@ -36,7 +35,7 @@ class FilamentMaintanceServiceProvider extends PackageServiceProvider
                     ->publishConfigFile()
                     ->publishMigrations()
                     ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub('albertofuentes/filament-maintance');
+                    ->askToStarRepoOnGitHub('albertofuentes/filament-maintenance');
             });
 
         $configFileName = $package->shortName();
@@ -80,18 +79,20 @@ class FilamentMaintanceServiceProvider extends PackageServiceProvider
         if (app()->runningInConsole()) {
             foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
                 $this->publishes([
-                    $file->getRealPath() => base_path("stubs/filament-maintance/{$file->getFilename()}"),
-                ], 'filament-maintance-stubs');
+                    $file->getRealPath() => base_path("stubs/filament-maintenance/{$file->getFilename()}"),
+                ], 'filament-maintenance-stubs');
             }
         }
 
         // Testing
-        Testable::mixin(new TestsFilamentMaintance);
+        Testable::mixin(new TestsFilamentMaintenance);
+
+        Livewire::component('filament-maintenance-switch', MaintenanceSwitch::class);
     }
 
     protected function getAssetPackageName(): ?string
     {
-        return 'albertofuentes/filament-maintance';
+        return 'albertofuentes/filament-maintenance';
     }
 
     /**
@@ -100,9 +101,8 @@ class FilamentMaintanceServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            // AlpineComponent::make('filament-maintance', __DIR__ . '/../resources/dist/components/filament-maintance.js'),
-            // Css::make('filament-maintance-styles', __DIR__ . '/../resources/dist/filament-maintance.css'),
-            // Js::make('filament-maintance-scripts', __DIR__ . '/../resources/dist/filament-maintance.js'),
+            // Css::make('filament-maintenance-styles', __DIR__ . '/../resources/dist/filament-maintenance.css'),
+            // Js::make('filament-maintenance-scripts', __DIR__ . '/../resources/dist/filament-maintenance.js'),
         ];
     }
 
@@ -112,7 +112,7 @@ class FilamentMaintanceServiceProvider extends PackageServiceProvider
     protected function getCommands(): array
     {
         return [
-            FilamentMaintanceCommand::class,
+            FilamentMaintenanceCommand::class,
         ];
     }
 
@@ -146,7 +146,7 @@ class FilamentMaintanceServiceProvider extends PackageServiceProvider
     protected function getMigrations(): array
     {
         return [
-            'create_filament-maintance_table',
+            'create_filament_maintenance_tables',
         ];
     }
 }

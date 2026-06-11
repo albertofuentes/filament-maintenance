@@ -1,7 +1,8 @@
 <?php
 
-namespace Albertofuentes\FilamentMaintance\Tests;
+namespace Albertofuentes\FilamentMaintenance\Tests;
 
+use Albertofuentes\FilamentMaintenance\FilamentMaintenanceServiceProvider;
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
 use Filament\Actions\ActionsServiceProvider;
@@ -19,7 +20,6 @@ use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
-use Albertofuentes\FilamentMaintance\FilamentMaintanceServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -31,7 +31,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Albertofuentes\\FilamentMaintance\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+            fn (string $modelName) => 'Albertofuentes\\FilamentMaintenance\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
     }
 
@@ -51,7 +51,7 @@ class TestCase extends Orchestra
             SupportServiceProvider::class,
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
-            FilamentMaintanceServiceProvider::class,
+            FilamentMaintenanceServiceProvider::class,
         ];
 
         sort($providers);

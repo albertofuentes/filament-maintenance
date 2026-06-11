@@ -1,6 +1,6 @@
 <?php
 
-namespace Albertofuentes\FilamentMaintance\Database\Factories;
+namespace Albertofuentes\FilamentMaintenance\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 

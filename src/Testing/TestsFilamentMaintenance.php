@@ -1,13 +1,13 @@
 <?php
 
-namespace Albertofuentes\FilamentMaintance\Testing;
+namespace Albertofuentes\FilamentMaintenance\Testing;
 
 use Livewire\Features\SupportTesting\Testable;
 
 /**
  * @mixin Testable
  */
-class TestsFilamentMaintance
+class TestsFilamentMaintenance
 {
     //
 }

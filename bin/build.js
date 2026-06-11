@@ -46,7 +46,7 @@ const defaultOptions = {
 compile({
     ...defaultOptions,
     entryPoints: ['./resources/js/index.js'],
-    outfile: './resources/dist/filament-maintance.js',
+    outfile: './resources/dist/filament-maintenance.js',
 }).then(() => {
-    console.log(`Build completed for filament-maintance.js`)
+    console.log(`Build completed for filament-maintenance.js`)
 })

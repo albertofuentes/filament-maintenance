@@ -1,5 +1,5 @@
 <?php
 
-use Albertofuentes\FilamentMaintance\Tests\TestCase;
+use Albertofuentes\FilamentMaintenance\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

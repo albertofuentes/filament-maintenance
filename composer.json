@@ -1,18 +1,18 @@
 {
-    "name": "albertofuentes/filament-maintance",
-    "description": "Filament Maintenance te permite activar fácilmente el modo de mantenimiento para tu panel Filament durante actualizaciones, correcciones o periodos de inactividad programados.",
+    "name": "albertofuentes/filament-maintenance",
+    "description": "Enable maintenance mode per Filament panel with configurable access exceptions, customizable downtime pages, and audit history.",
     "keywords": [
         "albertofuentes",
         "laravel",
         "filamentphp",
         "filament",
         "filament-plugin",
-        "filament-maintance"
+        "filament-maintenance"
     ],
-    "homepage": "https://github.com/albertofuentes/filament-maintance",
+    "homepage": "https://github.com/albertofuentes/filament-maintenance",
     "support": {
-        "issues": "https://github.com/albertofuentes/filament-maintance/issues",
-        "source": "https://github.com/albertofuentes/filament-maintance"
+        "issues": "https://github.com/albertofuentes/filament-maintenance/issues",
+        "source": "https://github.com/albertofuentes/filament-maintenance"
     },
     "license": "MIT",
     "authors": [
@@ -39,18 +39,18 @@
     },
     "autoload": {
         "psr-4": {
-            "Albertofuentes\\FilamentMaintance\\": "src/",
-            "Albertofuentes\\FilamentMaintance\\Database\\Factories\\": "database/factories/"
+            "Albertofuentes\\FilamentMaintenance\\": "src/",
+            "Albertofuentes\\FilamentMaintenance\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Albertofuentes\\FilamentMaintance\\Tests\\": "tests/"
+            "Albertofuentes\\FilamentMaintenance\\Tests\\": "tests/"
         }
     },
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
-        "analyse": "phpstan analyse",
+        "analyse": "phpstan analyse --memory-limit=512M",
         "lint": "pint",
         "test": "pest",
         "test:lint": "pint --test"
@@ -58,10 +58,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Albertofuentes\\FilamentMaintance\\FilamentMaintanceServiceProvider"
+                "Albertofuentes\\FilamentMaintenance\\FilamentMaintenanceServiceProvider"
             ],
             "aliases": {
-                "FilamentMaintance": "Albertofuentes\\FilamentMaintance\\Facades\\FilamentMaintance"
+                "FilamentMaintenance": "Albertofuentes\\FilamentMaintenance\\Facades\\FilamentMaintenance"
             }
         }
     },

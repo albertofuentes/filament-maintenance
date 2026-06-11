@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `filament-maintance` will be documented in this file.
+All notable changes to `filament-maintenance` will be documented in this file.
 
 ## 1.0.0 - 202X-XX-XX
 
