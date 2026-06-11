@@ -1,19 +1,11 @@
-# :package_description
+# Filament Maintenance te permite activar fácilmente el modo de mantenimiento para tu panel Filament durante actualizaciones, correcciones o periodos de inactividad programados.
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/albertofuentes/filament-maintance.svg?style=flat-square)](https://packagist.org/packages/albertofuentes/filament-maintance)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/albertofuentes/filament-maintance/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/albertofuentes/filament-maintance/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/albertofuentes/filament-maintance/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/albertofuentes/filament-maintance/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/albertofuentes/filament-maintance.svg?style=flat-square)](https://packagist.org/packages/albertofuentes/filament-maintance)
 
-<!--delete-->
----
-This repo can be used to scaffold a Filament plugin. Follow these steps to get started:
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Make something great!
----
-<!--/delete-->
 
 This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
 
@@ -22,7 +14,7 @@ This is where your description should go. Limit it to a paragraph or two. Consid
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
+composer require albertofuentes/filament-maintance
 ```
 
 > [!IMPORTANT]
@@ -31,26 +23,26 @@ composer require :vendor_slug/:package_slug
 After setting up a custom theme add the plugin's views to your theme css file or your app's css file if using the standalone packages.
 
 ```css
-@source '../../../../vendor/:vendor_slug/:package_slug/resources/**/*.blade.php';
+@source '../../../../vendor/albertofuentes/filament-maintance/resources/**/*.blade.php';
 ```
 
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
+php artisan vendor:publish --tag="filament-maintance-migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-config"
+php artisan vendor:publish --tag="filament-maintance-config"
 ```
 
 Optionally, you can publish the views using
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-views"
+php artisan vendor:publish --tag="filament-maintance-views"
 ```
 
 This is the contents of the published config file:
@@ -63,8 +55,8 @@ return [
 ## Usage
 
 ```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+$filamentMaintance = new Albertofuentes\FilamentMaintance();
+echo $filamentMaintance->echoPhrase('Hello, Albertofuentes!');
 ```
 
 ## Testing
@@ -87,7 +79,7 @@ Please review [our security policy](.github/SECURITY.md) on how to report securi
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Alberto Fuentes](https://github.com/albertofuentes)
 - [All Contributors](../../contributors)
 
 ## License
