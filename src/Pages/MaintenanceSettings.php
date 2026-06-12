@@ -4,13 +4,27 @@ namespace Albertofuentes\FilamentMaintenance\Pages;
 
 use Albertofuentes\FilamentMaintenance\Support\MaintenanceManager;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Actions;
+use Filament\Schemas\Components\EmbeddedSchema;
+use Filament\Schemas\Components\Form;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @property-read Schema $form
+ */
 class MaintenanceSettings extends Page
 {
     protected string $view = 'filament-maintenance::pages.maintenance-settings';
@@ -23,22 +37,10 @@ class MaintenanceSettings extends Page
 
     protected static ?string $slug = 'maintenance';
 
-    public bool $enabled = false;
-
-    public string $maintenanceTitle = '';
-
-    public string $message = '';
-
-    public string $customView = '';
-
-    public string $allowedIps = '';
-
-    public string $allowedRoles = '';
-
-    public string $managerRoles = '';
-
-    /** @var array<int|string> */
-    public array $managerUserIds = [];
+    /**
+     * @var array<string, mixed>|null
+     */
+    public ?array $data = [];
 
     public static function canAccess(): bool
     {
@@ -58,43 +60,36 @@ class MaintenanceSettings extends Page
 
         $setting = $maintenance->setting($this->panelId());
 
-        $this->enabled = $setting->enabled;
-        $this->maintenanceTitle = (string) ($setting->title ?: config('maintenance.default_title'));
-        $this->message = (string) ($setting->message ?: config('maintenance.default_message'));
-        $this->customView = (string) ($setting->view ?: '');
-        $this->allowedIps = implode(PHP_EOL, $setting->allowed_ips ?? []);
-        $this->allowedRoles = implode(PHP_EOL, $setting->allowed_roles ?? []);
-        $this->managerRoles = implode(PHP_EOL, $setting->manager_roles ?? []);
-        $this->managerUserIds = $setting->manager_user_ids ?? [];
+        $this->form->fill([
+            'enabled' => $setting->enabled,
+            'maintenanceTitle' => (string) ($setting->title ?: config('maintenance.default_title')),
+            'message' => (string) ($setting->message ?: config('maintenance.default_message')),
+            'customView' => (string) ($setting->view ?: ''),
+            'allowedIps' => implode(PHP_EOL, $setting->allowed_ips ?? []),
+            'allowedRoles' => implode(PHP_EOL, $setting->allowed_roles ?? []),
+            'managerRoles' => implode(PHP_EOL, $setting->manager_roles ?? []),
+            'managerUserIds' => $setting->manager_user_ids ?? [],
+        ]);
     }
 
     public function save(MaintenanceManager $maintenance): void
     {
         abort_unless(static::canAccess(), 403);
 
-        $validated = $this->validate([
-            'enabled' => ['boolean'],
-            'maintenanceTitle' => ['nullable', 'string', 'max:255'],
-            'message' => ['nullable', 'string'],
-            'customView' => ['nullable', 'string', 'max:255'],
-            'allowedIps' => ['nullable', 'string'],
-            'allowedRoles' => ['nullable', 'string'],
-            'managerRoles' => ['nullable', 'string'],
-            'managerUserIds' => ['array'],
-        ]);
+        $data = $this->form->getState();
 
         $setting = $maintenance->setting($this->panelId());
         $wasEnabled = $setting->enabled;
 
         $setting->forceFill([
-            'enabled' => $validated['enabled'],
-            'title' => $validated['maintenanceTitle'] ?: config('maintenance.default_title'),
-            'message' => $validated['message'] ?: config('maintenance.default_message'),
-            'view' => $validated['customView'] ?: null,
-            'allowed_ips' => $this->lines($validated['allowedIps'] ?? ''),
-            'allowed_roles' => $this->lines($validated['allowedRoles'] ?? ''),
-            'manager_roles' => $this->lines($validated['managerRoles'] ?? ''),
-            'manager_user_ids' => array_values(array_filter($validated['managerUserIds'] ?? [])),
+            'enabled' => $data['enabled'],
+            'title' => $data['maintenanceTitle'] ?: config('maintenance.default_title'),
+            'message' => $data['message'] ?: config('maintenance.default_message'),
+            'view' => $data['customView'] ?: null,
+            'allowed_ips' => $this->lines($data['allowedIps'] ?? ''),
+            'allowed_roles' => $this->lines($data['allowedRoles'] ?? ''),
+            'manager_roles' => $this->lines($data['managerRoles'] ?? ''),
+            'manager_user_ids' => array_values(array_filter($data['managerUserIds'] ?? [])),
         ])->save();
 
         $action = match (true) {
@@ -111,6 +106,92 @@ class MaintenanceSettings extends Page
             ->title('Configuracion guardada')
             ->success()
             ->send();
+    }
+
+    public function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Section::make('Panel status')
+                    ->description('Enable maintenance mode only for this Filament panel.')
+                    ->schema([
+                        Toggle::make('enabled')
+                            ->label('Maintenance mode')
+                            ->inline(false),
+                    ]),
+
+                Section::make('Maintenance page')
+                    ->schema([
+                        TextInput::make('maintenanceTitle')
+                            ->label('Title')
+                            ->maxLength(255),
+
+                        Textarea::make('message')
+                            ->label('Message')
+                            ->rows(5),
+
+                        TextInput::make('customView')
+                            ->label('Custom Blade view')
+                            ->placeholder('filament-maintenance::maintenance.default')
+                            ->helperText('Leave empty to use the package default view.')
+                            ->maxLength(255),
+                    ]),
+
+                Section::make('Access during maintenance')
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                Textarea::make('allowedIps')
+                                    ->label('Allowed IP addresses or CIDR ranges')
+                                    ->placeholder("127.0.0.1\n192.168.1.0/24")
+                                    ->rows(5)
+                                    ->helperText('One entry per line or comma-separated. IPv4, IPv6 and CIDR ranges are supported.'),
+
+                                Textarea::make('allowedRoles')
+                                    ->label('Spatie roles that can access')
+                                    ->placeholder("admin\nsupport")
+                                    ->rows(3)
+                                    ->helperText('Users with any of these roles can enter while maintenance mode is enabled.'),
+                            ]),
+                    ]),
+
+                Section::make('Maintenance managers')
+                    ->description('These users or roles can open this page and use the header switch.')
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                Select::make('managerUserIds')
+                                    ->label('Manager users')
+                                    ->multiple()
+                                    ->searchable()
+                                    ->options(fn (): array => $this->getAvailableUsersProperty())
+                                    ->helperText('If no users or roles are configured, authenticated users can manage the first setup.'),
+
+                                Textarea::make('managerRoles')
+                                    ->label('Spatie manager roles')
+                                    ->placeholder('admin')
+                                    ->rows(4),
+                            ]),
+                    ]),
+            ])
+            ->statePath('data');
+    }
+
+    public function content(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Form::make([EmbeddedSchema::make('form')])
+                    ->id('maintenance-settings-form')
+                    ->livewireSubmitHandler('save')
+                    ->footer([
+                        Actions::make([
+                            Action::make('save')
+                                ->label('Save configuration')
+                                ->submit('save'),
+                        ]),
+                    ]),
+            ]);
     }
 
     public function getHeading(): string | Htmlable
