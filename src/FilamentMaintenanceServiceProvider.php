@@ -38,7 +38,7 @@ class FilamentMaintenanceServiceProvider extends PackageServiceProvider
                     ->askToStarRepoOnGitHub('albertofuentes/filament-maintenance');
             });
 
-        $configFileName = 'maintenance';
+        $configFileName = 'filament-maintenance';
 
         if (file_exists($package->basePath("/../config/{$configFileName}.php"))) {
             $package->hasConfigFile($configFileName);
@@ -61,9 +61,9 @@ class FilamentMaintenanceServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        if (app()->runningInConsole() && file_exists(__DIR__ . '/../config/maintenance.php')) {
+        if (app()->runningInConsole() && file_exists(__DIR__ . '/../config/filament-maintenance.php')) {
             $this->publishes([
-                __DIR__ . '/../config/maintenance.php' => config_path('maintenance.php'),
+                __DIR__ . '/../config/filament-maintenance.php' => config_path('filament-maintenance.php'),
             ], 'filament-maintenance-config');
         }
 

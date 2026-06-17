@@ -16,13 +16,13 @@ class MaintenanceManager
     public function setting(string $panelId): MaintenanceSetting
     {
         /** @var class-string<MaintenanceSetting> $model */
-        $model = config('maintenance.setting_model', MaintenanceSetting::class);
+        $model = config('filament-maintenance.setting_model', MaintenanceSetting::class);
 
         return $model::query()->firstOrCreate(
             ['panel_id' => $panelId],
             [
-                'title' => config('maintenance.default_title'),
-                'message' => config('maintenance.default_message'),
+                'title' => config('filament-maintenance.default_title'),
+                'message' => config('filament-maintenance.default_message'),
             ],
         );
     }
@@ -34,7 +34,7 @@ class MaintenanceManager
 
     public function canManage(Authenticatable $user, string $panelId): bool
     {
-        $callback = config('maintenance.can_manage_using');
+        $callback = config('filament-maintenance.can_manage_using');
 
         if (is_callable($callback) && $callback($user, $panelId) === true) {
             return true;
@@ -72,7 +72,7 @@ class MaintenanceManager
             return false;
         }
 
-        $callback = config('maintenance.can_bypass_using');
+        $callback = config('filament-maintenance.can_bypass_using');
 
         if (is_callable($callback) && $callback($user, $panelId) === true) {
             return true;
@@ -115,7 +115,7 @@ class MaintenanceManager
     public function record(string $panelId, string $action, ?Authenticatable $user = null, ?string $ip = null, array $payload = []): MaintenanceEvent
     {
         /** @var class-string<MaintenanceEvent> $model */
-        $model = config('maintenance.event_model', MaintenanceEvent::class);
+        $model = config('filament-maintenance.event_model', MaintenanceEvent::class);
 
         return $model::query()->create([
             'panel_id' => $panelId,

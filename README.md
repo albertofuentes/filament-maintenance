@@ -22,6 +22,8 @@ php artisan vendor:publish --tag="filament-maintenance-config"
 php artisan vendor:publish --tag="filament-maintenance-views"
 ```
 
+The config file is published as `config/filament-maintenance.php`.
+
 ## Usage
 
 Register the plugin in the Filament panel where you want maintenance mode:

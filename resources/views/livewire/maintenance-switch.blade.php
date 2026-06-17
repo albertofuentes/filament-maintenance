@@ -1,23 +1,19 @@
 <div>
-    @if ($canManage)
-        <button
+@if ($canManage)
+    <div class="fi-filament-maintenance-switch">
+        <x-filament::badge
+            tag="button"
             type="button"
+            size="sm"
+            :color="$enabled ? 'danger' : 'success'"
+            :icon="$enabled ? 'heroicon-o-wrench-screwdriver' : 'heroicon-o-check-circle'"
+            :tooltip="$enabled ? 'Disable maintenance' : 'Enable maintenance'"
             wire:click="toggle"
-            wire:loading.attr="disabled"
-            @class([
-                'inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition',
-                'bg-danger-600 text-white hover:bg-danger-500' => $enabled,
-                'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-white/10 dark:text-gray-200 dark:hover:bg-white/20' => ! $enabled,
-            ])
+            wire:target="toggle"
+            aria-pressed="{{ $enabled ? 'true' : 'false' }}"
         >
-            <span
-                @class([
-                    'h-2 w-2 rounded-full',
-                    'bg-white' => $enabled,
-                    'bg-gray-500 dark:bg-gray-300' => ! $enabled,
-                ])
-            ></span>
-            <span>{{ $enabled ? 'Mantenimiento' : 'Operativo' }}</span>
-        </button>
-    @endif
+            {{ $enabled ? 'Maintenance' : 'Operational' }}
+        </x-filament::badge>
+    </div>
+@endif
 </div>

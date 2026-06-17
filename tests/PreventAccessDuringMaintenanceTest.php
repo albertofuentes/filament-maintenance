@@ -5,7 +5,7 @@ use Albertofuentes\FilamentMaintenance\Support\IpMatcher;
 use Albertofuentes\FilamentMaintenance\Support\MaintenanceManager;
 
 it('falls back to the package maintenance view when no configured view is available', function (): void {
-    config()->set('maintenance.view', null);
+    config()->set('filament-maintenance.view', null);
 
     $middleware = new PreventAccessDuringMaintenance(new MaintenanceManager(new IpMatcher));
     $method = new ReflectionMethod($middleware, 'viewName');
@@ -17,7 +17,7 @@ it('falls back to the package maintenance view when no configured view is availa
 });
 
 it('uses a valid configured or custom maintenance view', function (): void {
-    config()->set('maintenance.view', 'app::maintenance');
+    config()->set('filament-maintenance.view', 'app::maintenance');
 
     $middleware = new PreventAccessDuringMaintenance(new MaintenanceManager(new IpMatcher));
     $method = new ReflectionMethod($middleware, 'viewName');

@@ -31,8 +31,8 @@ class PreventAccessDuringMaintenance
             ->view($this->viewName($setting->view), [
                 'panelId' => $panelId,
                 'setting' => $setting,
-                'title' => $setting->title ?: $this->configString('default_title', 'Panel en mantenimiento'),
-                'message' => $setting->message ?: $this->configString('default_message', 'Estamos realizando tareas de mantenimiento. Vuelve a intentarlo mas tarde.'),
+                'title' => $setting->title ?: $this->configString('default_title', 'Panel under maintenance'),
+                'message' => $setting->message ?: $this->configString('default_message', 'We are performing maintenance. Please try again later.'),
             ], 503)
             ->header('Retry-After', '3600');
     }
@@ -48,7 +48,7 @@ class PreventAccessDuringMaintenance
 
     private function configString(string $key, string $default): string
     {
-        $value = config("maintenance.{$key}");
+        $value = config("filament-maintenance.{$key}");
 
         if (is_string($value) && filled(trim($value))) {
             return trim($value);

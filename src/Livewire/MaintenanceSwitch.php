@@ -47,7 +47,7 @@ class MaintenanceSwitch extends Component
         }
 
         Notification::make()
-            ->title($this->enabled ? 'Mantenimiento activado' : 'Mantenimiento desactivado')
+            ->title($this->enabled ? 'Maintenance enabled' : 'Maintenance disabled')
             ->success()
             ->send();
     }

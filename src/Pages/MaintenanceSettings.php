@@ -31,9 +31,9 @@ class MaintenanceSettings extends Page
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-wrench-screwdriver';
 
-    protected static ?string $navigationLabel = 'Mantenimiento';
+    protected static ?string $navigationLabel = 'Maintenance';
 
-    protected static ?string $title = 'Mantenimiento';
+    protected static ?string $title = 'Maintenance';
 
     protected static ?string $slug = 'maintenance';
 
@@ -62,8 +62,8 @@ class MaintenanceSettings extends Page
 
         $this->form->fill([
             'enabled' => $setting->enabled,
-            'maintenanceTitle' => (string) ($setting->title ?: config('maintenance.default_title')),
-            'message' => (string) ($setting->message ?: config('maintenance.default_message')),
+            'maintenanceTitle' => (string) ($setting->title ?: config('filament-maintenance.default_title')),
+            'message' => (string) ($setting->message ?: config('filament-maintenance.default_message')),
             'customView' => (string) ($setting->view ?: ''),
             'allowedIps' => implode(PHP_EOL, $setting->allowed_ips ?? []),
             'allowedRoles' => implode(PHP_EOL, $setting->allowed_roles ?? []),
@@ -83,8 +83,8 @@ class MaintenanceSettings extends Page
 
         $setting->forceFill([
             'enabled' => $data['enabled'],
-            'title' => $data['maintenanceTitle'] ?: config('maintenance.default_title'),
-            'message' => $data['message'] ?: config('maintenance.default_message'),
+            'title' => $data['maintenanceTitle'] ?: config('filament-maintenance.default_title'),
+            'message' => $data['message'] ?: config('filament-maintenance.default_message'),
             'view' => filled(trim((string) ($data['customView'] ?? ''))) ? trim((string) $data['customView']) : null,
             'allowed_ips' => $this->lines($data['allowedIps'] ?? ''),
             'allowed_roles' => $this->lines($data['allowedRoles'] ?? ''),
@@ -103,7 +103,7 @@ class MaintenanceSettings extends Page
         ]);
 
         Notification::make()
-            ->title('Configuracion guardada')
+            ->title('Configuration saved')
             ->success()
             ->send();
     }

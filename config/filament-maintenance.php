@@ -17,8 +17,8 @@ return [
     /*
      * Fallback content for new panel settings.
      */
-    'default_title' => 'Panel en mantenimiento',
-    'default_message' => 'Estamos realizando tareas de mantenimiento. Vuelve a intentarlo mas tarde.',
+    'default_title' => 'Panel under maintenance',
+    'default_message' => 'We are performing maintenance. Please try again later.',
 
     /*
      * Blade view rendered when a visitor cannot bypass maintenance.
