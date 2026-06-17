@@ -85,7 +85,7 @@ class MaintenanceSettings extends Page
             'enabled' => $data['enabled'],
             'title' => $data['maintenanceTitle'] ?: config('maintenance.default_title'),
             'message' => $data['message'] ?: config('maintenance.default_message'),
-            'view' => $data['customView'] ?: null,
+            'view' => filled(trim((string) ($data['customView'] ?? ''))) ? trim((string) $data['customView']) : null,
             'allowed_ips' => $this->lines($data['allowedIps'] ?? ''),
             'allowed_roles' => $this->lines($data['allowedRoles'] ?? ''),
             'manager_roles' => $this->lines($data['managerRoles'] ?? ''),
@@ -196,7 +196,7 @@ class MaintenanceSettings extends Page
 
     public function getHeading(): string | Htmlable
     {
-        return 'Mantenimiento del panel';
+        return 'Maintenance panel';
     }
 
     /**

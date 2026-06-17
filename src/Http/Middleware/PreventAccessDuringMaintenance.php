@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PreventAccessDuringMaintenance
 {
+    private const DEFAULT_VIEW = 'filament-maintenance::maintenance.default';
+
     public function __construct(
         private readonly MaintenanceManager $maintenance,
     ) {}
@@ -26,12 +28,32 @@ class PreventAccessDuringMaintenance
         $setting = $this->maintenance->setting($panelId);
 
         return response()
-            ->view($setting->view ?: config('maintenance.view'), [
+            ->view($this->viewName($setting->view), [
                 'panelId' => $panelId,
                 'setting' => $setting,
-                'title' => $setting->title ?: config('maintenance.default_title'),
-                'message' => $setting->message ?: config('maintenance.default_message'),
+                'title' => $setting->title ?: $this->configString('default_title', 'Panel en mantenimiento'),
+                'message' => $setting->message ?: $this->configString('default_message', 'Estamos realizando tareas de mantenimiento. Vuelve a intentarlo mas tarde.'),
             ], 503)
             ->header('Retry-After', '3600');
+    }
+
+    private function viewName(mixed $view): string
+    {
+        if (is_string($view) && filled(trim($view))) {
+            return trim($view);
+        }
+
+        return $this->configString('view', self::DEFAULT_VIEW);
+    }
+
+    private function configString(string $key, string $default): string
+    {
+        $value = config("maintenance.{$key}");
+
+        if (is_string($value) && filled(trim($value))) {
+            return trim($value);
+        }
+
+        return $default;
     }
 }
